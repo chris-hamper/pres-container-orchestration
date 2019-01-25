@@ -271,3 +271,6 @@ body {
 @media print {
   .backgrounds {
     background-color: #222; } }
+
+.reveal.slide {
+  cursor: url("../../img/laser-pointer-32.png") 16 16, auto; }
