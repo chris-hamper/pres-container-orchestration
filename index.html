@@ -24,8 +24,155 @@
 	<body>
 		<div class="reveal">
 			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
+
+				<section>
+					<h1>Container Orchestration</h1>
+				</section>
+
+				<section>
+					<h2>What are Containers?</h2>
+				</section>
+
+				<section>
+          <h2>Docker</h2>
+
+					<section>
+						<ol>
+							<li class="fragment">Create <code>Dockerfile</code> - recipe for container</li>
+							<li class="fragment">Build the container</li>
+							<li class="fragment">(Upload container to a Docker Registry)</li>
+							<li class="fragment">(Deploy container on remote host)</li>
+							<li class="fragment">Run container</li>
+						</ol>
+					</section>
+
+					<section>
+						<pre><code class="hljs" data-trim style="max-height: 500px;">
+              # Base our Docker image on a pre-made image
+              FROM node:10.15.0-alpine
+
+              # Create and use folder under "node" user's home
+              WORKDIR /home/node/app
+              # Copy in our app files from the current dir
+              COPY . .
+
+              # Install node.js modules
+              RUN npm install
+
+              # Expose port 3000 for outside use, run as user "node"
+              EXPOSE 3000
+              USER node
+
+              # Start our app when the container is later run
+              CMD node index.js
+						</code></pre>
+					</section>
+
+					<section>
+						<pre><code class="hljs" data-trim>
+              # Build the container locally
+              $ docker build -t me/myapp:v1 .
+
+              # Push to Docker Registry
+              $ docker push me/myapp:v1
+
+              # Run from anywhere
+              $ docker run -p 3000:3000 me/myapp:v1
+						</code></pre>
+					</section>
+				</section>
+
+				<section>
+          <h2>Docker Compose</h2>
+
+          <section>
+            <h4>Define and create app composed of<br>multiple containers</h4>
+          </section>
+
+					<section>
+						<pre><code class="hljs" data-trim data-trim style="max-height: 500px;">
+              version: '3'
+              services:
+                app:
+                  build: .
+                  ports:
+                   - "3000:3000"
+                db:
+                  image: "mysql:8.0.14"
+                  ports:
+                   - "3306:3306"
+                  ...
+                redis:
+                  image: "redis:alpine"
+                  ports:
+                   - "6379:6379"
+                  ...
+						</code></pre>
+					</section>
+
+          <section>
+            <pre><code class="hljs" data-trim>
+              # Spin up infrastructure on the local machine
+              $ docker-compose up
+            </code></pre>
+          </section>
+        </section>
+
+        <section>
+          <h2>Kubernetes</h2>
+          <section>
+            <h4>"OS for distributed apps"</h4>
+          </section>
+
+          <section>
+            <ul>
+              <li>Pod - holds a container</li>
+              <li class="fragment">ReplicaSet - keep # Pods running</li>
+              <li class="fragment">Service - abstraction of set of pods</li>
+              <li class="fragment">Deployment - declare desired state</li>
+            </ul>
+          </section>
+
+          <section>
+            <h4>Deployments</h4>
+            <ul>
+              <li class="fragment">Rollout a new ReplicaSet</li>
+              <li class="fragment">Rolling upgrades</li>
+              <li class="fragment">Scaling up/down</li>
+              <li class="fragment">Roll back a failed deployment</li>
+            </ul>
+          </section>
+
+          <section>
+            <h4>"OS for distributed apps"</h4>
+            <ul>
+              <li class="fragment">Discovery of Services</li>
+              <li class="fragment">Network Ingress</li>
+              <li class="fragment">Load Balancing</li>
+            </ul>
+          </section>
+
+          <section>
+            <h4>Orchestration</h4>
+            <ul>
+              <li class="fragment">Helm Charts - "Package Manager"</li>
+              <li class="fragment">Spinnaker - Continuous Delivery</li>
+              <li class="fragment">Istio - Service Mesh
+                <ul class="fragment">
+                  <li>A/B Testing</li>
+                  <li>Canary Releases</li>
+                  <li>Rate Limiting</li>
+                  <li>Access Control</li>
+                </ul>
+              </li>
+            </ul>
+          </section>
+        </section>
+
+        <section>
+          <h2>Thank You!</h2>
+          <h4>Questions?</h4>
+        </section>
 			</div>
 		</div>
 
